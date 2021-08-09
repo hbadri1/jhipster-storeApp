@@ -48,5 +48,4 @@ node {
     stage('deployment') {
         bat "./gradlew deployHeroku --no-daemon"
     }
-
 }
