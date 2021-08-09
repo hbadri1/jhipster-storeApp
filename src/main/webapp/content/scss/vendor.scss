@@ -5,10 +5,14 @@ put Sass variables here:
 eg $input-color: red;
 ****************************/
 // Override Bootstrap variables
-@import 'bootstrap-variables';
+// Override Boostrap variables
+@import "bootstrap-variables";
+@import '~bootswatch/dist/materia/variables';
 // Import Bootstrap source files from node_modules
 @import '~bootstrap/scss/bootstrap';
-
+@import "~bootswatch/dist/materia/bootswatch";
 @import 'content/scss/rtl.scss';
 
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */
+
+

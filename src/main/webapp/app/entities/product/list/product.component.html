@@ -1,0 +1,113 @@
+<div>
+  <h2 id="page-heading" data-cy="ProductHeading">
+    <span jhiTranslate="storeApp.product.home.title">Products</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="storeApp.product.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        *jhiHasAnyAuthority="'ROLE_ADMIN'"
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-product"
+        [routerLink]="['/product/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="storeApp.product.home.createLabel"> Create a new Product </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
+    <span jhiTranslate="storeApp.product.home.notFound">No products found</span>
+  </div>
+
+
+
+
+
+  <div *ngIf="products">
+
+    <div class="list-group">
+      <a class="list-group-item list-group-item-action flex-column
+align-
+items-start"
+         *ngFor="let product of products; trackBy: trackId">
+
+        <div class="row">
+          <div class="col-2 col-xs-12 justify-content-center">
+            <img [src]="'data:' + product.imageContentType +
+';base64,' +
+product.image" style="max-height:150px;"
+                 alt="product image" />
+          </div>
+          <div class="col col-xs-12">
+        <div class="d-flex w-100 justify-content-between">
+          <a [routerLink]="['/product', product.id, 'view']">
+            <h5 class="mb-1">{{ product.name }}</h5>
+          </a>
+          <small *ngIf="product.productCategory">
+            <a [routerLink]="['/product-category', product
+.productCategory?.id, 'view']">
+              {{ product.productCategory?.id }}
+            </a>
+          </small>
+        </div>
+        <small class="mb-1">{{ product.description }}</small>
+        <p class="mb-1">Price: {{ product.price }}</p>
+        <small>
+          Size:
+          <span jhiTranslate="{{ 'storeApp.ProductSize.' + product.productSize
+}}">
+{{ product.productSize }}
+</span>
+        </small>
+
+            <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
+              <button type="submit" [routerLink]="['/product',
+product.id,
+'edit']" class="btn btn-primary btn-sm">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                <span class="d-none d-md-inline"
+                      jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+              <button type="submit" (click)="delete(product)"
+                      class="btn btn-
+danger btn-sm">
+                <fa-icon [icon]="'times'"></fa-icon>
+                <span class="d-none d-md-inline"
+                      jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="products && products.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>
